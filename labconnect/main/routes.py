@@ -40,6 +40,10 @@ def professor(rcs_id: str):
 def create_post():
     return render_template("posting.html")
 
+@main_blueprint.route("/report_bug")
+def report_bug():
+    return render_template("report_bug.html")
+
 
 @main_blueprint.route("/login")
 def login():

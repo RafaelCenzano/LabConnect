@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}FILL LATER{% endblock %}
+
+{% block content %}
+<main class="container">
+
+    <h1 style="display: flex; justify-content: center;">Report Bug</h1>
+
+    <form action="/create_post" method="POST">
+
+        <div class="mb-3 posting-alignment">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" placeholder="Your Title Here ...">
+        </div>
+
+        <div class="mb-3 posting-alignment">
+            <label style="display: flex; align-items: start;" for="title" class="form-label">Description</label>
+            <textarea style="height: 10rem;" class="form-control" id="title"
+                placeholder="What is this project about?"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Report</button>
+
+    </form>
+</main>
+{% endblock %}
