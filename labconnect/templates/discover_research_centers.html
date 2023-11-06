@@ -18,15 +18,15 @@
 
     <div class="mt-3">
 
-        {% for department in departments %}
+        {% for center in researchCenters %}
 
         {% if loop.index is divisibleby 3 or loop.index==1 %}
         <div class="discover-card-row">
             {% endif %}
             <div class="card discover-card" style="width: 18rem;">
-                <img src="{{ department.image }}" class="card-img-top border" alt="...">
+                <img src="" class="card-img-top border" alt="...">
                 <div class="card-body border">
-                    <p class="card-text">{{ department.title }}</p>
+                    <p class="card-text">{{ center.title }}</p>
                 </div>
             </div>
 
