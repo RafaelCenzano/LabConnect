@@ -27,6 +27,10 @@ def department(department: str):
 def discover():
     return render_template("discover.html")
 
+@main_blueprint.route("/discover/researchCenters")
+def discover_research_centers():
+    return render_template("discover_research_centers.html")
+
 
 @main_blueprint.route("/professor/<string:rcs_id>")
 def professor(rcs_id: str):
