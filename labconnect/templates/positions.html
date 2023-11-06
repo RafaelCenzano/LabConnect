@@ -274,43 +274,22 @@
 
                 <!-- Holds all the jobs -->
                 <div class="card position-card">
+                    
+                    {% for job in jobs %}
+                    
                     <div class="card no-border-radius">
                         <div class="card-body">
                             <h6>
-                                <span class="badge bg-danger">Professor Turner</span>
-                                <span class="badge bg-primary">$40 Per Hour</span>
+                                <span class="badge bg-danger">{{ job.professor }}</span>
+                                <span class="badge bg-primary">{{ job.pay }}</span>
                             </h6>
-                            <h5 class="card-title">Quantum Computing to solve NP-Complete Problems</h5>
-                            <h6 class="card-subtitle mb-2 text-body-secondary">Computer Science</h6>
-                            <p class="card-text">Russel Sage <br> CS • In-Person</p>
+                            <h5 class="card-title">{{ job.title }}s</h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">{{ job.department }}</h6>
+                            <p class="card-text"> {{ job.building }} <br> {{ job.location }}</p>
                         </div>
                     </div>
-
-
-                    <div class="card no-border-radius">
-                        <div class="card-body">
-                            <h6>
-                                <span class="badge bg-danger">Professor Turner</span>
-                                <span class="badge bg-primary">$40 Per Hour</span>
-                            </h6>
-                            <h5 class="card-title">Quantum Computing to solve NP-Complete Problems</h5>
-                            <h6 class="card-subtitle mb-2 text-body-secondary">Computer Science</h6>
-                            <p class="card-text">Russel Sage <br> CS • In-Person</p>
-                        </div>
-                    </div>
-
-
-                    <div class="card no-border-radius">
-                        <div class="card-body">
-                            <h6>
-                                <span class="badge bg-danger">Professor Turner</span>
-                                <span class="badge bg-primary">$40 Per Hour</span>
-                            </h6>
-                            <h5 class="card-title">Quantum Computing to solve NP-Complete Problems</h5>
-                            <h6 class="card-subtitle mb-2 text-body-secondary">Computer Science</h6>
-                            <p class="card-text">Russel Sage <br> CS • In-Person</p>
-                        </div>
-                    </div>
+                    
+                    {% endfor %}
 
                     <div class="top-margin">
                         <ul class="pagination">
