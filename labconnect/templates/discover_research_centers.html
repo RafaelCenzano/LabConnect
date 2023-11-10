@@ -3,6 +3,18 @@
 {% block title %}Discover{% endblock %}
 
 {% block content %}
+
+<script
+        src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"
+></script>
+
+<form action="/discover/researchCenters/" method="POST">
+    <input id="center_name" type="text" style="display:none;" name="title" value="{{ research_center.title }}" >
+    <input id="submitButton" style="display:none;" type="submit">
+</form>
+
 <main class="container py-3">
 
     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
@@ -23,7 +35,7 @@
         {% if loop.index is divisibleby 3 or loop.index==1 %}
         <div class="discover-card-row">
             {% endif %}
-            <div class="card discover-card" style="width: 18rem;">
+            <div class="center card discover-card" id="{{ center.title }}" style="width: 18rem;">
                 <img src="{{center.image}}" class="card-img-top border" alt="...">
                 <div class="card-body border">
                     <p class="card-text">{{ center.title }}</p>
@@ -36,4 +48,6 @@
         {% endfor %}
     </div>
 </main>
+
+<script src="../static/js/centers.js"> </script>
   {% endblock %}

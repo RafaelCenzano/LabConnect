@@ -76,6 +76,10 @@ def discover_research_centers():
     centers = scrapeResearchCenters()
     return render_template("discover_research_centers.html", researchCenters=centers)
 
+@main_blueprint.route("/discover/researchCenters/<string:center_name>")
+def display_research_center():
+    return render_template("research_center.html")
+
 
 @main_blueprint.route("/professor/<string:rcs_id>")
 def professor(rcs_id: str):

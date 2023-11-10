@@ -3,7 +3,19 @@
 {% block title %}Department{% endblock %}
 
 {% block content %}
+
+<script
+        src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"
+></script>
+
 <main>
+    <form action="" method="POST">
+        <input id="center_name" type="text" style="display:none;" name="title" value="{{ research_center.title }}" >
+        <input style="display:none;" type="submit">
+    </form>
+    
     <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
         aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -42,18 +54,19 @@
 
                 {% for research_center in research_centers %}
                 {% if loop.index is divisibleby 3 or loop.index==1 %}
-                <div class="mt-3" style=" display: flex; gap: 1rem;">
-                    {% endif %}
-                    <div class=""
-                        style="padding: 0.3rem; border: solid gray 1px; border-radius: 5px;  display: flex; gap: 1rem;  width: 18rem;">
-                        <img src="{{ research_center.icon }}" style="width: 30%; border-radius: 100%;" alt="...">
-                        <div class="fs-6 fw-semibold" style="display: flex; align-items: center;">
-                            {{ research_center.title }}
+                    
+                    <div class="mt-3 center" style=" display: flex; gap: 1rem;">
+                        {% endif %}
+                        <div class=""
+                            style="padding: 0.3rem; border: solid gray 1px; border-radius: 5px;  display: flex; gap: 1rem;  width: 18rem;">
+                            <img src="{{ research_center.icon }}" style="width: 30%; border-radius: 100%;" alt="...">
+                            <div class="fs-6 fw-semibold" style="display: flex; align-items: center;">
+                                {{ research_center.title }}
+                            </div>
                         </div>
+                        
+                        {% if loop.index is divisibleby 3 or loop.last %}
                     </div>
-
-                    {% if loop.index is divisibleby 3 or loop.last %}
-                </div>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -106,4 +119,6 @@
             </div>
         </div>
 </main>
+
+<script src="../static/js/centers.js"></script>
 {% endblock %}
