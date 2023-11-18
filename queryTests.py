@@ -1,10 +1,17 @@
-from flask import abort, render_template
-
-from . import main_blueprint
-
+import string
+import uuid
 from labconnect import db
 from labconnect.models import *
 from sqlalchemy.orm import contains_eager
+
+# helper functions
+def generate_random_id():
+    random_id = str(uuid.uuid4())
+    return random_id
+
+#filter to database
+
+# FILTER DEPARTMENTS
 
 def allFilters(filters):
     courses = filters["courses"]
@@ -64,7 +71,6 @@ def filterByYear(years):
     filtered_opportunities = result.fetchall()
     return filtered_opportunities
 
-
 # OR relationship between departments
 def filterByDeparments(departments): 
     stmt = (
@@ -96,63 +102,77 @@ def filterBySemester(semesters):
     result = db.session.execute(stmt)
     filtered_opportunities = result.fetchall()
     return filtered_opportunities
+
+
+# FILTER LABRUNNERS
+def filterLabRunnerByDepartment(department_name):
+    stmt = (
+        db.select(LabRunner)
+        .join(LabRunner.rpi_departments)
+        .options(
+            contains_eager(LabRunner.rpi_departments),
+        )
+        .join(LabRunner.rpi_departments)
+        .filter(RPIDepartments.name.in_(department_name))
+    )
     
-      
-
-@main_blueprint.route("/")
-def index():
-    return render_template("index.html")
+    result = db.session.execute(stmt)
+    filtered_labrunners = result.fetchall()
+    return filtered_labrunners
 
 
-@main_blueprint.route("/opportunities")
-def positions():
-    return render_template("opportunitys.html")
+def filterLabRunnerByName(name):
+    stmt = (
+        db.select(LabRunner)
+        .filter(LabRunner.name.in_(name))
+    )
+    
+    result = db.session.execute(stmt)
+    filtered_labrunners = result.fetchall()
+    return filtered_labrunners
 
 
-@main_blueprint.route("/opportunity/<int:id>")
-def opportunity(id: int):
-    return render_template("opportunity_details.html")
+def filterLabRunnerByRCSID(rcs_id):
+    stmt = (
+        db.select(LabRunner)
+        .filter(LabRunner.rcs_id.in_(rcs_id))
+    )
+    
+    result = db.session.execute(stmt)
+    filtered_labrunners = result.fetchall()
+    return filtered_labrunners
 
 
-@main_blueprint.route("/profile/<string:rcs_id>")
-def profile(rcs_id: str):
-    return render_template("profile.html")
 
-
-@main_blueprint.route("/department/<string:department>")
-def department(department: str):
-    return render_template("department.html")
-
-
-@main_blueprint.route("/discover")
-def discover():
-    return render_template("discover.html")
-
-
-@main_blueprint.route("/professor/<string:rcs_id>")
-def professor(rcs_id: str):
-    # test code until database code is added
-    if "bob" == rcs_id:
-        return render_template("professor.html")
-    abort(500)
-
-
-@main_blueprint.route("/create_post")
-def create_post():
-    return render_template("posting.html")
-
-
-@main_blueprint.route("/login")
-def login():
-    return render_template("sign_in.html")
-
-
-@main_blueprint.route("/information")
-@main_blueprint.route("/info")
-def information():
-    return render_template("URP_Basic_Information_Page.html")
-
-
-@main_blueprint.route("/tips")
-def tips():
-    return render_template("tips_and_tricks.html")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
