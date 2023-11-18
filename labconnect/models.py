@@ -122,6 +122,8 @@ class ClassYears(db.Model):
 
     def __str__(self) -> str:
         return f"{self.class_year}, {self.class_name}"
+    
+
 
 
 # application_due_dates( date ), key: date
