@@ -2,6 +2,85 @@ from flask import abort, render_template
 
 from . import main_blueprint
 
+from labconnect import db
+from labconnect.models import *
+from sqlalchemy.orm import contains_eager
+
+
+
+def filterByCourses(courses):
+    stmt = (
+        db.select(Opportunities)
+        .join(Opportunities.recommends_courses)
+        .options(
+            contains_eager(Opportunities.recommends_courses),
+        )
+        .join(Opportunities.recommends_courses)
+        .filter(Courses.course_code.in_(courses))
+    )
+    
+    result = db.session.execute(stmt)
+    filtered_opportunities = result.fetchall()
+    return filtered_opportunities
+
+def filterByYear(result,years):
+    stmt = (
+        db.select(Opportunities)
+        .join(Opportunities.recommends_class_years)
+        .options(
+            contains_eager(Opportunities.recommends_class_years),
+        )
+        .join(Opportunities.recommends_class_years)
+        .filter(ClassYears.class_year.in_(years))
+    )
+    
+    result = db.session.execute(stmt)
+    filtered_opportunities = result.fetchall()
+    return filtered_opportunities
+
+
+# Apply Department filters
+def filterByDeparments(result,departments):
+    stmt = (
+        db.select(Opportunities)
+        .join(Opportunities.recommends_majors)
+        .options(
+            contains_eager(Opportunities.recommends_majors),
+        )
+        .join(Opportunities.recommends_majors)
+        .filter(Majors.major_name.in_(departments))
+    )
+    
+    result = db.session.execute(stmt)
+    filtered_opportunities = result.fetchall()
+    return filtered_opportunities
+
+
+def filterBySemester(result,semesters):
+    # stmt = db.select(Opportunities)
+    # result = db.session.execute(stmt)
+    # allOpportunities = result.fetchall()
+    
+    # valid_semesters = ["summer", "winter", "spring"]
+
+# Assuming you have a session object named 'db.session'
+    stmt = (
+        db.select(Opportunities)
+        .join(Opportunities.active_semesters)
+        .options(
+            contains_eager(Opportunities.active_semesters),
+        )
+        .join(Opportunities.recommends_majors)
+        .filter(Semesters.season.in_(semesters))
+    )
+    result = db.session.execute(stmt)
+    filtered_opportunities = result.fetchall()
+    return filtered_opportunities
+    
+
+# result = db.session.execute(stmt)
+# filtered_opportunities = result.fetchall()
+      
 
 @main_blueprint.route("/")
 def index():
