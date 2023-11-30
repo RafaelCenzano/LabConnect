@@ -7,9 +7,26 @@
     <div class="container">
         <div class="row">
             <div class="search-grid col">
+                <style>
+                    .search form {
+                        display: inline-block;
+                    }
+                
+                    .search button {
+                        display: inline-block;
+                        vertical-align: top; 
+                    }
+                </style>
+
+                
+
 
                 <div class="search">
-                    Search
+                    <form>
+                        <label for="profs"></label>
+                        <input type="text" id="profs" name="profs"><br>
+                    </form>
+                    <button type = "button" class="btn btn-primary">Search</button>
                 </div>
 
                 <div class="search-grid-buttons">
@@ -81,9 +98,6 @@
                         </ul>
                     </div>
 
-                </div>
-                <div class="" style="border-radius: 0px; grid-column: span 8">
-                    <iframe src="position_details.html" title="Position_Details" height="800" width="610"></iframe>
                 </div>
             </div>
         </div>

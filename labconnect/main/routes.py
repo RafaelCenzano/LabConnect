@@ -34,11 +34,11 @@ def discover():
 
 
 @main_blueprint.route("/professor/<string:rcs_id>")
-def professor(rcs_id: str):
+def professor():
     # test code until database code is added
-    if "bob" == rcs_id:
-        return render_template("professor.html")
-    abort(500)
+    
+    return render_template("professor.html")
+    # abort(500)
 
 
 @main_blueprint.route("/create_post")
@@ -60,3 +60,5 @@ def information():
 @main_blueprint.route("/tips")
 def tips():
     return render_template("tips_and_tricks.html")
+
+
