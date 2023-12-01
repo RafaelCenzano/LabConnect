@@ -32,7 +32,6 @@ class ContactLinks(db.Model):
     def __str__(self) -> str:
         return f"{self.contact_link}, {self.contact_type}"
 
-
 # lab_runner( rcs_id, name ), key: rcs_id
 class LabRunner(db.Model):
     __tablename__ = "lab_runner"
@@ -70,6 +69,7 @@ class Opportunities(db.Model):
     has_upfront_pay_comp = relationship(
         "UpfrontPayCompInfo", secondary="has_upfront_pay_comp"
     )
+    
     has_credit_comp = relationship("CreditCompInfo", secondary="has_credit_comp")
 
     def __str__(self) -> str:

@@ -1,4 +1,5 @@
 import string
+import datetime
 import uuid
 from labconnect import db
 from labconnect.models import *
@@ -9,6 +10,12 @@ def generate_random_id():
     random_id = str(uuid.uuid4())
     return random_id
 
+def findValidID():
+    while True:
+        id = generate_random_id()
+        if not Opportunities.query.filter_by(id=id).first():
+            return id
+
 #filter to database
 
 # FILTER DEPARTMENTS
@@ -18,22 +25,23 @@ def allFilters(filters):
     departments = filters["departments"]
     semesters = filters["semesters"]
     years = filters["years"]
+    
     stmt = (
         db.select(Opportunities)
         .join(Opportunities.recommends_courses)
         .join(Opportunities.recommends_class_years)
         .join(Opportunities.recommends_majors)
         .join(Opportunities.active_semesters)
+        .filter(len(courses) == 0 or Courses.course_name.in_(courses))
+        .filter(len(years) == 0 or ClassYears.class_year.in_(years))
+        .filter(len(departments == 0) or Majors.major_name.in_(departments))
+        .filter(len(semesters) == 0 or Semesters.season.in_(semesters))
         .options(
             contains_eager(Opportunities.recommends_courses),
             contains_eager(Opportunities.recommends_class_years),
             contains_eager(Opportunities.recommends_majors),
             contains_eager(Opportunities.active_semesters),
         )
-        .filter(Courses.course_name.in_(courses))
-        .filter(ClassYears.class_year.in_(years))
-        .filter(Majors.major_name.in_(departments))
-        .filter(Semesters.season.in_(semesters))
     )
     
     result = db.session.execute(stmt)
@@ -120,7 +128,6 @@ def filterLabRunnerByDepartment(department_name):
     filtered_labrunners = result.fetchall()
     return filtered_labrunners
 
-
 def filterLabRunnerByName(name):
     stmt = (
         db.select(LabRunner)
@@ -131,20 +138,113 @@ def filterLabRunnerByName(name):
     filtered_labrunners = result.fetchall()
     return filtered_labrunners
 
-
-def filterLabRunnerByRCSID(rcs_id):
+def getLabRunner(rcs_id):
     stmt = (
         db.select(LabRunner)
-        .filter(LabRunner.rcs_id.in_(rcs_id))
+        .filter_by(LabRunner.rcs_id == rcs_id)
     )
     
     result = db.session.execute(stmt)
-    filtered_labrunners = result.fetchall()
+    filtered_labrunners = result.first()
     return filtered_labrunners
+
+def getCourses(course_names):
+    stmt = (
+        db.select(Courses)
+        .filter(Courses.course_name.in_(course_names))
+    )
+    
+    return db.session.execute(stmt).fetchall()
+
+def getSemesters(semesters):
+    stmt = (
+        db.select(Semesters)
+        .filter(len(semesters) == 0 or Semesters.season.in_(semesters))
+    )
+            
+    return db.execute(stmt).fetchall()
+
+def getYears(years):
+    stmt = (
+        db.select(ClassYears)
+        .filter(len(years) == 0 or ClassYears.class_year.in_(years))
+    )
+            
+    return db.execute(stmt).fetchall()
+
+def getMajors(majors):
+    stmt = (
+        db.select(Majors)
+        .filter(len(majors) == 0 or Majors.major_name.in_(majors))
+    )
+            
+    return db.execute(stmt).fetchall()
+
+def getDeadline(deadline):
+    stmt = (
+        db.select(ApplicationDueDates)
+        .filter(ApplicationDueDates.date == deadline)
+    )
+    
+    result = db.execute(stmt).fetchall()
+    
+    if result == []:
+        new_deadline = ApplicationDueDates()
+        new_deadline.date = datetime.datetime.now()
+        return new_deadline
+    else:
+        return result
+
+def getSalaryCompensation(salary_compensation):
+    stmt = (
+        db.select(SalaryCompInfo)
+        .filter(SalaryCompInfo.usd_per_hour == salary_compensation)
+    )
+    
+    result = db.execute(stmt).fetchall()
+    
+    if result == []:
+        new_salary_compensation = SalaryCompInfo()
+        new_salary_compensation.usd_per_hour = salary_compensation
+        return new_salary_compensation
+    else:
+        return result
+
+def getUpfrontCompensation(upfront_compensation):
+    stmt = (
+        db.select(UpfrontPayCompInfo)
+        .filter(UpfrontPayCompInfo.usd == upfront_compensation)
+    )
+    
+    result = db.execute(stmt).fetchall()
+    
+    if (result == []):
+        new_upfront_compensation = UpfrontPayCompInfo()
+        new_upfront_compensation.usd = upfront_compensation
+        return new_upfront_compensation
+    else:
+        return result
+
+def getCreditCompensation(courseCode, credit_compensation):
+    stmt = (
+        db.select(CreditCompInfo)
+        .filter(CreditCompInfo.number_of_credits == credit_compensation
+                or CreditCompInfo.course_code == courseCode)
+    )
+    
+    result = db.execute(stmt).fetchall()
+    
+    if (result == []):
+        new_credit_compensation = CreditCompInfo()
+        new_credit_compensation.number_of_credits = credit_compensation
+        new_credit_compensation.course_code = courseCode
+        return new_credit_compensation
+    else:
+        return result
+
 
 
 # ADD TO DATABASE
-
 def addUser(rcsid: str, name: str, department_name: str):
     # Create a new LabRunner
     user = LabRunner(rcs_id=rcsid, name=name)
@@ -164,84 +264,74 @@ def addUser(rcsid: str, name: str, department_name: str):
     else:
         print(f"Department {department_name} does not exist. User not added.")
 
-# TODO: ask team how to handle collisions between ids
-
-def getCourses(course_names):
-    courses = []
-    for course_name in course_names:
-        course = Courses.query.filter_by(name=course_name).first()
-        if not course:
-            # Create a new course if it doesn't exist
-            course = Courses(name=course_name)
-            db.session.add(course)
-        courses.append(course)
-
-    db.session.commit()
-    return courses
-
-def getSemesters(semesters):
-    filtered_semesters = []
-    for name in semesters:
-        semester = Semesters.query.filter_by(name=name).first()
-        if not semester:
-            continue
-        else:
-            filtered_semesters.append(semester)
-            
-    return filtered_semesters
-
-def getYears(years):
-    filtered_years = []
-    for year in years:
-        year = ClassYears.query.filter_by(name=year).first()
-        if not year:
-            continue
-        else:
-            filtered_years.append(year)
-            
-    return filtered_years
-
-def getMajors(majors):
-    filtered_majors = []
-    for major in majors:
-        major = Majors.query.filter_by(name=major).first()
-        if not major:
-            continue
-        else:
-            filtered_majors.append(major)
-            
-    return filtered_majors
 
 #TODO: ask team about this and fill in the missing tables
-def addOpportunity(rcsid:string, name:string, description:string, active_status:bool, recommended_experience:string, courses, majors, semesters, deadline):
+def addOpportunity(rcsid:string, name:string, description:string, active_status:bool, recommended_experience:string, courses, majors, semesters, upfrontPay, salary, courseCode, creditComp,  deadline):
     
-    author = filterLabRunnerByRCSID(rcsid)
+    author = getLabRunner(rcsid)
     majors = getMajors(majors)
     semesters = getSemesters(semesters)
     courses = getCourses(courses)
+    dueDate = getDeadline(deadline)
+    salary = getSalaryCompensation(salary)
+    upfrontPay = getUpfrontCompensation(upfrontPay)
+    credits = getCreditCompensation(courseCode, creditComp)
     
     if not author:
         print(f"User {rcsid} does not exist. Opportunity not added.")
         return
     
+    author = author[0]
+    
     # Create a new Opportunity
-    id = generate_random_id()
+    id = findValidID()
+
     opportunity = Opportunities()
+    
+    # direct variables
     opportunity.id = id
     opportunity.name = name
     opportunity.description = description
     opportunity.active_status = active_status
     opportunity.recommended_experience = recommended_experience
-    opportunity.lab_runners.append(author[0])
-    opportunity.recommends_majors = majors
-    opportunity.recommends_courses = courses
-    opportunity.active_semesters = semesters
-    opportunity.application_due = deadline
+    
+    # relationships
+    opportunity.lab_runners.append(author)
+    opportunity.recommends_majors.append(majors)
+    opportunity.recommends_courses.append(courses)
+    opportunity.active_semesters.append(semesters)
+    opportunity.application_due.append(dueDate)
+    opportunity.has_salary_comp.append(salary)
+    opportunity.has_upfront_pay_comp.append(upfrontPay)
+    opportunity.has_credit_comp.append(credits)
     
     db.session.add(opportunity)
+    
+    author.promoted_opportunities.append(opportunity)
+    
     db.session.commit()
     
+# add a new contact link to the database
+def addContactLink(rcsid:string, link:string, type:string):
     
+    # find the labrunner
+    labrunner = filterLabRunnerByRCSID(rcsid)
+    
+    # if the labrunner doesn't exist, return
+    if not labrunner:
+        print(f"User {rcsid} does not exist. Link not added.")
+        return
+    
+    # create a new contact link
+    contact_link = ContactLinks()
+    contact_link.link = link
+    contact_link.type = type
+    
+    # add the contact link to the labrunner
+    labrunner[0].contact_links.append(contact_link)
+    
+    #commit the changes
+    db.session.commit()
     
     
     
