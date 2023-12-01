@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Report Bug{% endblock %}
+
+{% block content %}
+
+<style>
+    textarea,
+        input {
+            width: 100%;
+            display: block; /* vertical stacking */
+            margin-bottom: 1rem; 
+        }
+</style>
+
+
+<main>
+    <form id="bug-report-form">
+        <label for="bug-title">Link to bugged page:</label>
+        <input type="text" id="bug-title" name="bug-title" required>
+
+        <label for="bug-description">Bug Description:</label>
+        <textarea id="bug-description" name="bug-description" rows="4" required></textarea>
+
+        <button type="submit">Submit Bug Report</button>
+    </form>
+</main>
+
+
+{% endblock %}

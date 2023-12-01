@@ -12,6 +12,9 @@ def index():
 def positions():
     return render_template("opportunitys.html")
 
+@main_blueprint.route("/bugger")
+def bugger():
+    return render_template("bugger.html")
 
 @main_blueprint.route("/opportunity/<int:id>")
 def opportunity(id: int):
