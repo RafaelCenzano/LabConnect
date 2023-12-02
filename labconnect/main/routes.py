@@ -35,6 +35,9 @@ def department(department: str):
 def discover():
     return render_template("discover.html")
 
+@main_blueprint.route("/Team")
+def Teamer():
+    return render_template("Team.html")
 
 @main_blueprint.route("/professor/<string:rcs_id>")
 def professor():
