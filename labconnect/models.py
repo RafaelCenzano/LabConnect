@@ -45,7 +45,6 @@ class LabRunner(db.Model):
     def __str__(self) -> str:
         return f"{self.rcs_id}, {self.name}"
 
-
 # opportunities( id, name, description, active_status, recommended_experience ), key: id
 class Opportunities(db.Model):
     __tablename__ = "opportunities"
@@ -58,6 +57,7 @@ class Opportunities(db.Model):
     lab_runners = relationship(
         "LabRunner", secondary="promotes", back_populates="promoted_opportunities"
     )
+    
     recommends_courses = relationship("Courses", secondary="recommends_courses")
     recommends_majors = relationship("Majors", secondary="recommends_majors")
     recommends_class_years = relationship(

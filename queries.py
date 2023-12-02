@@ -21,6 +21,9 @@ def findValidID():
 # FILTER DEPARTMENTS
 
 def allFilters(filters):
+    
+    #TODO discuss how to filter by names and try to break this function down
+    
     courses = filters["courses"]
     departments = filters["departments"]
     semesters = filters["semesters"]
@@ -32,21 +35,33 @@ def allFilters(filters):
         .join(Opportunities.recommends_class_years)
         .join(Opportunities.recommends_majors)
         .join(Opportunities.active_semesters)
+        .join(Opportunities.application_due)
+        .join(Opportunities.has_credit_comp)
+        .join(Opportunities.has_upfront_pay_comp)
+        .join(Opportunities.has_salary_comp)
         .filter(len(courses) == 0 or Courses.course_name.in_(courses))
         .filter(len(years) == 0 or ClassYears.class_year.in_(years))
         .filter(len(departments == 0) or Majors.major_name.in_(departments))
         .filter(len(semesters) == 0 or Semesters.season.in_(semesters))
+        .filter(CreditCompInfo.number_of_credits >= filters["credit_comp"])
+        .filter(HasUpfrontPayComp.usd >= filters["upfrontPay"])
+        .filter(SalaryCompInfo.usd_per_hour >= filters["salary"])
         .options(
             contains_eager(Opportunities.recommends_courses),
             contains_eager(Opportunities.recommends_class_years),
             contains_eager(Opportunities.recommends_majors),
             contains_eager(Opportunities.active_semesters),
+            contains_eager(Opportunities.application_due),
+            contains_eager(Opportunities.has_credit_comp),
+            contains_eager(Opportunities.has_upfront_pay_comp),
+            contains_eager(Opportunities.has_salary_comp)
         )
     )
     
     result = db.session.execute(stmt)
     results = result.fetchall()
     return results
+
 
 def filterByCourses(courses):
     stmt = (
@@ -315,7 +330,7 @@ def addOpportunity(rcsid:string, name:string, description:string, active_status:
 def addContactLink(rcsid:string, link:string, type:string):
     
     # find the labrunner
-    labrunner = filterLabRunnerByRCSID(rcsid)
+    labrunner = getLabRunner(rcsid)
     
     # if the labrunner doesn't exist, return
     if not labrunner:
