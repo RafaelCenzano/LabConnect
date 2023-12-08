@@ -168,6 +168,11 @@ body {
   columns: 8;
 }
 
+.position-card-col {
+  display: grid;
+  rows: 8;
+}
+
 .position-card {
   margin-top: 1rem;
   margin-bottom: 1rem;
