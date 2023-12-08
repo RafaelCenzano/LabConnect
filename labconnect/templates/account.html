@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+
+<main class="container">
+
+    <h2>Student profile</h2>
+
+    <section>
+        <p>Name: John Doe</p>
+        <p>Email: Doej@rpi.edu</p>
+    </section>
+
+    <section>
+        <p>Summary: Experienced professional seeking new opportunities...</p>
+        <p>Skills: JavaScript, Python, HTML, CSS.</p>
+        <p>Degree: Undergrad(ongoing)</p>
+        <p>Linkedin: XXXXXX</p>
+        <span class="professor-image-wrapper">
+            <img src="{frontendImages\pfp_def.png}" alt="pfp_img" class="pfp-student">
+        </span>
+    </section>
+
+    <section>
+        <h3>Job Applications</h3>
+        <div class="mt-4 no-border-radius">
+            <div class="card position-grid">
+                <div class="card no-border-radius">
+                    <div class="card-body">
+                        <h6>
+                            <span class="badge bg-danger">Rejected</span>
+                            <span class="badge bg-primary">$40 Per Hour</span>
+                        </h6>
+                        <h5 class="card-title">Quantum Computing to solve NP-Complete Problems</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">Computer Science</h6>
+                        <p class="card-text">Russel Sage <br> CS • In-Person</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h3>saved jobs</h3>
+        <div>
+            You currently have no saved jobs.
+        </div>
+    </section>
+
+</main>
