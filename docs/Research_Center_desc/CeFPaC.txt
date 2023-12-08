@@ -1,12 +1,1 @@
-Welcome to the Center for Flow Physics and Control (CeFPaC).  CeFPaC was founded in 2012 with a main objective to 
-link between fundamental research and application.  The mission of CeFPaC is to conduct research  in flow physics, 
-prediction, modeling and control.  The fundamental research is aimed at verifying or developing theories for fluid 
-dynamic behavior, and the application research is to implement these theories towards controlling realistic flows.
-The center has two main thrusts:  (i) Aerodynamics (aerial, ground, and underwater vehicles), and (ii) wind energy 
-(smart wind turbine blades, building integrated wind, and smart buildings).
-
-The research at CeFPaC is interdisciplinary where projects span from designing and testing of smart blades for wind 
-turbines to developing new techniques for reducing aircraft drag.  CeFPaC team members come from multiple 
-departments and schools at RPI, and funding for the center comes from industry (Boeing, Northrop Grumman, and more),
-federal agencies (NSF, AFOSR, ONR, AFRL, NASA), state agencies (NYSERDA and NYSTAR), and international (Israeli 
-Ministry of Defense).
+ABOUT: CeFPaC was founded in 2012 with a main objective to link between fundamental research and application.  The mission of CeFPaC is to conduct research  in flow physics, prediction, modeling and control. The center has two main thrusts:  (i) Aerodynamics (aerial, ground, and underwater vehicles), and (ii) wind energy (smart wind turbine blades, building integrated wind, and smart buildings).The research at CeFPaC is interdisciplinary where projects span from designing and testing of smart blades for wind turbines to developing new techniques for reducing aircraft drag. 
