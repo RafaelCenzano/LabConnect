@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}profList{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class = "row">
+        <div class = "search-grid col">
+            <div class="search-grid-buttons">
+                <style>
+                    .search form {
+                        display: inline-block;
+                    }
+                
+                    .search button {
+                        display: inline-block;
+                        vertical-align: top; 
+                    }
+
+                </style>
+                <button type="button" class="btn btn-primary">Filters</button>
+            </div>
+        </div>
+
+    </div>
+
+    
+
+    <div class="card bg-light text-black position-card">
+            <h5 class="card-title">
+                <span class="professor-image-wrapper">
+                    <img src="{frontendImages\pfp_def.png}" alt="Professor" class="professor-image">
+                </span>
+                Professor Wes Turner
+                <span class="badge bg-warning">Research center here</span>
+                <span class="badge bg-warning">Computer Science</span>
+                
+            </h5>
+            <p class="card-text">
+                Rensselaer Course for Open Software lead professor.
+            </p>
+            
+            
+            <button type="button" class="btn btn-primary">email</button>
+    
+        </div>
+
+        <div class="card bg-light text-black position-card">
+            <h5 class="card-title">
+                <span class="professor-image-wrapper">
+                    <img src="{frontendImages\pfp_def.png}" alt="Professor" class="professor-image">
+                </span>
+                Professor Wes Turner
+                <span class="badge bg-warning">Research center here</span>
+                <span class="badge bg-warning">Computer Science</span>
+                
+            </h5>
+            <p class="card-text">
+                Rensselaer Course for Open Software lead professor.
+            </p>
+            
+            
+            <button type="button" class="btn btn-primary">email</button>
+    
+        </div>
+    
+</main>
+{% endblock %}
