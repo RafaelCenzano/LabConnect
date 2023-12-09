@@ -1,9 +1,13 @@
 import string
 import datetime
 import uuid
-from labconnect import db
+from labconnect import db, create_app
 from labconnect.models import *
 from sqlalchemy.orm import contains_eager
+
+app = create_app()
+
+
 
 # helper functions
 def generate_random_id():
@@ -155,13 +159,19 @@ def filterLabRunnerByName(name):
 
 def getLabRunner(rcs_id):
     stmt = (
-        db.select(LabRunner)
-        .filter_by(LabRunner.rcs_id == rcs_id)
+        db.select(LabRunner).where(LabRunner.rcs_id == rcs_id)
     )
     
-    result = db.session.execute(stmt)
-    filtered_labrunners = result.first()
-    return filtered_labrunners
+    result = db.session.execute(stmt).fetchall()
+    return result
+
+def getDepartment(department_name):
+    stmt = (
+        db.select(RPIDepartments).where(RPIDepartments.name == department_name)
+    )
+    
+    result = db.session.execute(stmt).first()
+    return result
 
 def getCourses(course_names):
     stmt = (
@@ -262,14 +272,23 @@ def getCreditCompensation(courseCode, credit_compensation):
 # ADD TO DATABASE
 def addUser(rcsid: str, name: str, department_name: str):
     # Create a new LabRunner
+    user = getLabRunner(rcsid)
+    
+    if user:
+        return 
+    
     user = LabRunner(rcs_id=rcsid, name=name)
+    
+    db.session.add(user)
+    db.session.commit()
 
     # Query the RPIDepartments to find the department by name
-    department = RPIDepartments.query.filter_by(name=department_name).first()
+    department = getDepartment(department_name)
 
     # Check if the department exists
     if department:
         # Add the department to the LabRunner's departments
+        user = getLabRunner(rcsid)
         user.rpi_departments.append(department)
 
         # Add the LabRunner to the session and commit the changes
@@ -279,6 +298,7 @@ def addUser(rcsid: str, name: str, department_name: str):
     else:
         print(f"Department {department_name} does not exist. User not added.")
 
+    
 
 #TODO: ask team about this and fill in the missing tables
 def addOpportunity(rcsid:string, name:string, description:string, active_status:bool, recommended_experience:string, courses, majors, semesters, upfrontPay, salary, courseCode, creditComp,  deadline):
@@ -347,6 +367,98 @@ def addContactLink(rcsid:string, link:string, type:string):
     
     #commit the changes
     db.session.commit()
+    
+
+# testing to see if everything works  
+    
+with app.app_context():
+    # add a user to the database
+    a = getLabRunner("led")
+    print(a)
+    
+    addUser("wowza", "Liam Dwyer", "Computer Science")
+    a = getLabRunner("wowza")
+    print(a)
+    
+    # write a suite of tests for my functions
+    # add a new opportunity to the database
+    addOpportunity("wowza", "test", "test", True, "test", ["CSCI 1100"], ["Computer Science"], ["Fall"], 0, 0, "CSCI 1100", 0, datetime.datetime.now())
+    a = Opportunities.query.all()
+    print(a)
+    
+    # add a new contact link to the database
+    addContactLink("wowza", "www.google.com", "test")
+    a = ContactLinks.query.all()
+    print(a)
+    
+    # filter by courses
+    a = filterByCourses(["CSCI 1100"])
+    print(a)
+    
+    # filter by years
+    a = filterByYear(["2021"])
+    print(a)
+    
+    # filter by departments
+    a = filterByDeparments(["Computer Science"])
+    print(a)
+    
+    # filter by semesters
+    a = filterBySemester(["Fall"])
+    print(a)
+    
+    # filter by all
+    a = allFilters({"courses": ["CSCI 1100"], "departments": ["Computer Science"], "semesters": ["Fall"], "years": ["2021"], "credit_comp": 0, "upfrontPay": 0, "salary": 0})
+    print(a)
+    
+    # get a labrunner
+    a = getLabRunner("wowza")
+    print(a)
+    
+    # get a department
+    a = getDepartment("Computer Science")
+    print(a)
+    
+    # get a course
+    a = getCourses(["CSCI 1100"])
+    print(a)
+    
+    # get a semester
+    a = getSemesters(["Fall"])
+    print(a)
+    
+    # get a year
+    a = getYears(["2021"])
+    print(a)
+    
+    # get a major
+    a = getMajors(["Computer Science"])
+    print(a)
+    
+    # get a deadline
+    a = getDeadline(datetime.datetime.now())
+    print(a)
+    
+    # get a salary compensation
+    
+    a = getSalaryCompensation(0)
+    print(a)
+    
+    # get an upfront compensation
+    a = getUpfrontCompensation(0)
+    print(a)
+    
+    # get a credit compensation
+    a = getCreditCompensation("CSCI 1100", 0)
+    print(a)
+    
+    # get a contact link
+    a = ContactLinks.query.all()
+    print(a)
+    
+    # get an opportunity
+    a = Opportunities.query.all()
+    print(a)
     
     
     
